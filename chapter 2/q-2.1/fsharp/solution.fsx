@@ -1,25 +1,43 @@
-type ListNode =
-    struct
-        val Value: int
-        val Next: ListNode option
-    end
+open System.Collections.Generic
 
-let rec printList (list: ListNode option) =
-    match list with
-    | None -> ()
-    | Some node ->
-        printfn "%d" node.Value
-        printList node.Next
+type LinkedList<'t> =
+    | Node of 't * LinkedList<'t>
+    | End
 
+let rec walk =
+    function
+    | End -> printfn "%s" "End"
+    | Node(value, list) ->
+        printfn "%A" value
+        walk list
 
-let rec dedupe (head: ListNode) = function
-    | None -> None
-    | Some node ->
-        let rec loop (list: ListNode) = function
-            | None -> None
-            | Some node: ListNode ->
-                if node.Value = node.Next.Value then
-                    loop node.Next
+let rec toLinkedList =
+    function
+    | [] -> End
+    | x :: xs -> Node(x, (toLinkedList xs))
+
+let rec dedupeList =
+
+    function
+    | End -> End
+    | Node(value, list) ->
+        let values = new HashSet<int>([ value ])
+
+        let rec loop =
+            function
+            | End -> End
+            | Node(value, list) ->
+
+                if values.Contains(value) then
+                    loop list
                 else
-                    Some { Value = node.Value; Next = loop node.Next }
-        Some { Value = node.Value; Next = loop node.Next }
+                    values.Add(value) |> ignore
+                    Node(value, loop list)
+
+        Node(value, loop list)
+
+let list = [ 1; 2; 1; 1; 1 ]
+let linkedList = toLinkedList list
+walk linkedList
+let dedupedList = dedupeList linkedList
+walk dedupedList
