@@ -1,47 +1,41 @@
 open System.Collections.Generic
 
-type Node = { Value: int; Next: (Node option) ref }
+type Node = { Value: int; Next: (Node option) }
 
 
-let rec kthLast list : Node =
-    let mutable kth: Node option ref = ref None
+let rec kthLast (list) (k: int) : int option =
+    let mutable kth: Node option = None
 
-    // Loop through the list and keep track of the kth last element
-    let mutable node: Node option ref = ref list
-    let mutable index = 0
+    let mutable node: Node option = list
+    let mutable index = k
 
-    while (node.Value.IsSome) do
-        if index >= 3 then
-            if kth.Value.IsSome then
-                kth <- kth.Value.Value.Next
-            else
-                kth <- node
+    while node.IsSome do
+        if index = 0 && kth.IsNone then
+            kth <- Some(list.Value)
+        elif kth.IsSome then
+            kth <- Some(kth.Value.Next.Value)
 
-        index <- index + 1
-        node <- node.Value.Value.Next
+        index <- index - 1
+        node <- node.Value.Next
 
-    kth.Value.Value
+    match kth with
+    | Some(n) -> Some(n.Value)
+    | None -> None
 
 let list =
     Some(
         { Value = 1
           Next =
-            ref (
-                Some
-                    { Value = 2
-                      Next =
-                        ref (
-                            Some
-                                { Value = 3
-                                  Next =
-                                    ref (
-                                        Some
-                                            { Value = 4
-                                              Next = ref (Some { Value = 5; Next = ref None }) }
-                                    ) }
-                        ) }
-            ) }
+            (Some
+                { Value = 2
+                  Next =
+                    (Some
+                        { Value = 3
+                          Next =
+                            (Some
+                                { Value = 4
+                                  Next = (Some { Value = 5; Next = None }) }) }) }) }
     )
 
-let value = kthLast list
-printfn "%A" value.Value
+let value = kthLast list 0
+printfn "%A" (value)
