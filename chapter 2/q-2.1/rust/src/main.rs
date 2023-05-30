@@ -9,27 +9,24 @@ struct Node {
 fn dedupe(head: &mut Option<Box<Node>>) {
     let values = &mut HashSet::new();
     let mut current = head;
-    while let Some(node) = current {
-        let next = &mut node.next;
-        match next {
-            Some(next) => {
-                if values.contains(&next.value) {
-                    print!("{} ", node.value);
-                    *current.next = next.take();
-                } else {
-                    values.insert(node.value);
-                    current = next;
+    loop {
+        match current {
+            // Some(node) if values.contains(&node.value) => {
+            //     node.next = node.next.take();
+            // }
+            Some(node)  => {
+                // If the next node (node.next.value) is a duplicate, skip it
+                if let Some(next) = &node.next {
+                    if values.contains(&next.value) {
+                        node.next = node.next.take().unwrap().next;
+                        continue;
+                    }
                 }
+
+                values.insert(node.value);
+                current = &mut node.next;
             }
-            None => {
-                if values.contains(&node.value) {
-                    print!("{} ", node.value);
-                    *current = None;
-                } else {
-                    values.insert(node.value);
-                    current = next;
-                }
-            }
+            None => break,
         }
     }
 }
