@@ -1,41 +1,21 @@
+
 type ListNode = {
   value: unknown;
   next: ListNode | null;
-  previous: ListNode | null;
 };
 
-// Copy the next node's value into the current node}j
+// Copy the next node's value into the current node
 function deleteNode(node: ListNode): void {
-
+  if (!node.next) return;
+  node.value = node.next.value;
+  node.next = node.next.next;
 }
 
-function kthLast(head: ListNode, k: number): ListNode | null {
-  let node: ListNode | null = head;
-  let kth: ListNode | null = null;
-  // Iterate through the list and keep track of the kth last node
-  // and break when we reach the end of the list
-  while (node) {
-    // When k is 0, we can start storing the kth last node
-    if (k === 0 && !kth) {
-      kth = head;
-    } else if (kth) {
-      // On subsequent iterations, we can move the kth last node forward
-      kth = kth.next;
-    }
-
-    // Move the node forward
-    node = node.next;
-    k--;
-  }
-
-  return kth;
-}
 
 function appendNode(previous: ListNode, value: unknown): ListNode {
-  const node: ListNode = { value, next: null, previous };
+  const node: ListNode = { value, next: null };
   if (previous.next) {
-    const next = { ...previous.next };
-    node.next = next;
+    node.next = previous.next;
   }
 
   previous.next = node;
@@ -43,13 +23,24 @@ function appendNode(previous: ListNode, value: unknown): ListNode {
   return node;
 }
 
-const list: ListNode = { value: 1, next: null, previous: null };
+function printList(list: ListNode): void {
+  let node: ListNode | null = list;
+  while (node) {
+    console.log(`node ${node.value}`)
+    node = node.next;
+  }
+}
 
-appendNode(list, 2);
-appendNode(list, 3);
-appendNode(list, 4);
-appendNode(list, 5);
+const list: ListNode = { value: 1, next: null };
+
+const node2 = appendNode(list, 2);
+const node3 = appendNode(list, 3);
+const node4 = appendNode(list, 4);
+const node5 = appendNode(list, 5);
 appendNode(list, 6);
-console.log(list)
+printList(list);
+console.log("Deleting node with value " + node3.value);
+deleteNode(node3);
+printList(list);
 // console.log(result);
 // const result = kthLast(list, 0);
