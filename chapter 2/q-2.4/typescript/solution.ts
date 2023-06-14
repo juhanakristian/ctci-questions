@@ -1,18 +1,41 @@
 
 type ListNode = {
-  value: unknown;
+  value: number;
   next: ListNode | null;
 };
 
-// Copy the next node's value into the current node
-function deleteNode(node: ListNode): void {
-  if (!node.next) return;
-  node.value = node.next.value;
-  node.next = node.next.next;
+function partition(list: ListNode, value: number): ListNode {
+  let current: ListNode | null = list;
+  let next: ListNode | null = list.next;
+  let head: ListNode | null = list;
+
+  while (next) {
+    if (next.value < value) {
+      // move to head
+      head = prependNode(head, next.value);
+      if (next.next != null) {
+        next.value = next.next.value;
+        next.next = next.next.next;
+      } else {
+        current.next = null;
+      }
+
+    }
+
+    current = next;
+    next = next.next;
+  }
+
+  return head;
 }
 
 
-function appendNode(previous: ListNode, value: unknown): ListNode {
+function prependNode(next: ListNode, value: number) {
+  const node: ListNode = { value, next };
+  return node;
+}
+
+function appendNode(previous: ListNode, value: number): ListNode {
   const node: ListNode = { value, next: null };
   if (previous.next) {
     node.next = previous.next;
@@ -35,12 +58,11 @@ const list: ListNode = { value: 1, next: null };
 
 const node2 = appendNode(list, 2);
 const node3 = appendNode(list, 3);
-const node4 = appendNode(list, 4);
+const node4 = appendNode(list, 2);
 const node5 = appendNode(list, 5);
 appendNode(list, 6);
 printList(list);
-console.log("Deleting node with value " + node3.value);
-deleteNode(node3);
-printList(list);
-// console.log(result);
-// const result = kthLast(list, 0);
+const parititonValue = 3;
+console.log(`Partition list with ${parititonValue}`);
+const head = partition(list, parititonValue);
+printList(head);
