@@ -5,6 +5,7 @@ type ListNode = {
 };
 
 function partition(list: ListNode, value: number): ListNode {
+  // Keep track of previous node so we can "delete" the last node
   let current: ListNode | null = list;
   let next: ListNode | null = list.next;
   let head: ListNode | null = list;
