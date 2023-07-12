@@ -50,4 +50,7 @@ fn main() {
     }));
     dedupe(&mut head);
     println!("{:?}", head);
+    asd
 }
+
+
