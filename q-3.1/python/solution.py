@@ -1,27 +1,7 @@
-from typing import TypeVar, List, Generic, Any, Protocol
+from typing import TypeVar, Generic
 
 
-class SupportsComparison(Protocol):
-    def __lt__(self: "SupportsComparison", other: Any) -> bool:
-        ...
-
-    def __le__(self: "SupportsComparison", other: Any) -> bool:
-        ...
-
-    def __eq__(self: "SupportsComparison", other: Any) -> bool:
-        ...
-
-    def __ne__(self: "SupportsComparison", other: Any) -> bool:
-        ...
-
-    def __gt__(self: "SupportsComparison", other: Any) -> bool:
-        ...
-
-    def __ge__(self: "SupportsComparison", other: Any) -> bool:
-        ...
-
-
-T = TypeVar("T", bound=SupportsComparison)
+T = TypeVar("T")
 
 
 class MultiStack(Generic[T]):
