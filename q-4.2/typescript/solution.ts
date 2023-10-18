@@ -4,7 +4,7 @@ type BinaryTreeNode<T> = {
   right?: BinaryTreeNode<T> | null;
 };
 
-function BinaryTree<T>(values: T[]): BinaryTreeNode<T> | null {
+function buildTree<T>(values: T[]): BinaryTreeNode<T> | null {
   if (values.length === 0) return null;
   if (values.length === 1) return { value: values[0] };
 
@@ -14,15 +14,30 @@ function BinaryTree<T>(values: T[]): BinaryTreeNode<T> | null {
 
   let root = {
     value: values[middle],
-    left: BinaryTree(left),
-    right: BinaryTree(right),
+    left: buildTree(left),
+    right: buildTree(right),
   };
 
   return root;
 }
 
+class BinaryTree<T> {
+  private root: BinaryTreeNode<T> | null;
+
+  constructor(values: T[]) {
+    this.root = buildTree(values);
+  }
+
+  toString() {
+    return JSON.stringify(this.root);
+  }
+
+  print() {
+    console.log(this.root);
+  }
+}
+
 const values = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const tree = BinaryTree(values);
-
-console.log(tree);
+const tree = new BinaryTree(values);
+tree.print();
